@@ -1,0 +1,6 @@
+# plruby extension
+comment = 'load Ruby interpreter and execute Ruby script from within a database'
+default_version = '0.5.5'
+module_pathname = '$libdir/plruby'
+relocatable = true
+
