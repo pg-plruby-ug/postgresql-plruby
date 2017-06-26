@@ -6,6 +6,11 @@ ARGV.collect! {|x|
 orig_argv = ARGV.dup
 
 require 'mkmf'
+require 'rbconfig'
+
+if RUBY_VERSION <= '1.8.7'
+   RbConfig = Config
+end
 
 class AX
    def marshal_dump
@@ -52,7 +57,7 @@ def create_lang(version = 74, suffix = '', safe = 0)
 
 
    create function plruby#{suffix}_call_handler() returns #{opaque}
-   as '#{Config::CONFIG["sitearchdir"]}/plruby#{suffix}.#{CONFIG["DLEXT"]}'
+   as '#{RbConfig::CONFIG["sitearchdir"]}/plruby#{suffix}.#{CONFIG["DLEXT"]}'
    language '#{language}';
 
    create #{trusted} language 'plruby#{suffix}'
@@ -191,11 +196,17 @@ suffix = with_config('suffix').to_s
 $CFLAGS += " -DPLRUBY_CALL_HANDLER=plruby#{suffix}_call_handler"
 $CFLAGS += " -DPLRUBY_VALIDATOR=plruby#{suffix}_validator"
 
+if RUBY_VERSION <= '1.8.7'
+   $ruby_path = $ruby
+else
+   $ruby_path = RbConfig::expand(CONFIG["bindir"]) + File::Separator + RbConfig::CONFIG["RUBY_BASE_NAME"]
+end
+
 subdirs.each do |key|
    orig_argv << "--with-cflags='#$CFLAGS -I.. -I ../..'"
    orig_argv << "--with-ldflags='#$LDFLAGS'"
    orig_argv << "--with-cppflags='#$CPPFLAGS'"
-   cmd = "#{CONFIG['RUBY_INSTALL_NAME']} extconf.rb #{orig_argv.join(' ')}"
+   cmd = $ruby_path + " extconf.rb #{orig_argv.join(' ')}"
    system("cd #{key}; #{cmd}")
 end
 
@@ -205,11 +216,11 @@ begin
    Dir.chdir("src")
    if CONFIG["ENABLE_SHARED"] == "no"
       libs = if CONFIG.key?("LIBRUBYARG_STATIC")
-                Config::expand(CONFIG["LIBRUBYARG_STATIC"].dup).sub(/^-l/, '')
+                RbConfig::expand(CONFIG["LIBRUBYARG_STATIC"].dup).sub(/^-l/, '')
              else
-                Config::expand(CONFIG["LIBRUBYARG"].dup).sub(/lib([^.]*).*/, '\\1')
+                RbConfig::expand(CONFIG["LIBRUBYARG"].dup).sub(/lib([^.]*).*/, '\\1')
              end
-      find_library(libs, "ruby_init", Config::expand(CONFIG["archdir"].dup))
+      find_library(libs, "ruby_init", RbConfig::expand(CONFIG["archdir"].dup))
    end
    $objs = ["plruby.o", "plplan.o", "plpl.o", "pltrans.o"] unless $objs
    create_makefile("plruby#{suffix}")
@@ -250,12 +261,19 @@ ri-site:
 
 test: src/$(DLLIB)
 EOF
+
+if RUBY_VERSION <= '1.8.6'
+  $ruby_path = $ruby
+else
+  $ruby_path = RbConfig::expand(CONFIG["bindir"]) + File::Separator + RbConfig::CONFIG["RUBY_BASE_NAME"]
+end
+
 regexp = %r{\Atest/conv_(.*)}
 Dir["test/*"].each do |dir|
    if regexp =~ dir
       next unless subdirs.include?("src/conversions/#{$1}")
    end
-   make.puts "\t-(cd #{dir} ; RUBY='#{$ruby}' sh ./runtest #{version} #{suffix})"
+   make.puts "\t-(cd #{dir} ; RUBY='#{$ruby_path}' sh ./runtest #{version} #{suffix})"
 end
 
 make.close
