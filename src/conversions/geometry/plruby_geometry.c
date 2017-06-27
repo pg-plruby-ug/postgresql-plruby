@@ -254,7 +254,7 @@ NAME_(VALUE obj, VALUE a)                                       \
         if (OBJ_TAINTED(obj) || OBJ_TAINTED(a)) OBJ_TAINT(res); \
         return res;                                             \
     }                                                           \
-    return rb_funcall(a, rb_frame_last_func(), 1, obj);         \
+    return rb_funcall(a, rb_frame_this_func(), 1, obj);         \
 }
 
 POINT_CALL(pl_point_add,point_add);
@@ -590,7 +590,7 @@ pl_lseg_closest(VALUE obj, VALUE a)
             return res;
         }
     }
-    return rb_funcall(a, rb_frame_last_func(), 1, obj);
+    return rb_funcall(a, rb_frame_this_func(), 1, obj);
 }
 
 static VALUE
@@ -605,7 +605,7 @@ pl_lseg_intersect(VALUE obj, VALUE a)
         if (PLRUBY_DFC2(lseg_intersect, l0, l1)) return Qtrue;
         return Qfalse;
     }
-    return rb_funcall(a, rb_frame_last_func(), 1, obj);
+    return rb_funcall(a, rb_frame_this_func(), 1, obj);
 }
 
 static VALUE
@@ -670,15 +670,15 @@ pl_box_to_datum(VALUE obj, VALUE a)
 
     case CIRCLEOID:
         obj = pl_convert(obj, rb_intern("to_circle"), pl_circle_mark);
-        return rb_funcall(obj, rb_frame_last_func(), 1, a);
+        return rb_funcall(obj, rb_frame_this_func(), 1, a);
 
     case POLYGONOID:
         obj = pl_convert(obj, rb_intern("to_poly"), pl_poly_mark);
-        return rb_funcall(obj, rb_frame_last_func(), 1, a);
+        return rb_funcall(obj, rb_frame_this_func(), 1, a);
 
     case POINTOID:
         obj = pl_convert(obj, rb_intern("to_point"), pl_point_mark);
-        return rb_funcall(obj, rb_frame_last_func(), 1, a);
+        return rb_funcall(obj, rb_frame_this_func(), 1, a);
 
     default:
         return Qnil;
@@ -1141,11 +1141,11 @@ pl_path_to_datum(VALUE obj, VALUE a)
 
     case POLYGONOID:
         obj = pl_convert(obj, rb_intern("to_poly"), pl_poly_mark);
-        return rb_funcall(obj, rb_frame_last_func(), 1, a);
+        return rb_funcall(obj, rb_frame_this_func(), 1, a);
 
     case POINTOID:
         obj = pl_convert(obj, rb_intern("to_point"), pl_point_mark);
-        return rb_funcall(obj, rb_frame_last_func(), 1, a);
+        return rb_funcall(obj, rb_frame_this_func(), 1, a);
 
     default:
         return Qnil;
@@ -1464,19 +1464,19 @@ pl_poly_to_datum(VALUE obj, VALUE a)
 
     case CIRCLEOID:
         obj = pl_convert(obj, rb_intern("to_circle"), pl_circle_mark);
-        return rb_funcall(obj, rb_frame_last_func(), 1, a);
+        return rb_funcall(obj, rb_frame_this_func(), 1, a);
 
     case PATHOID:
         obj = pl_convert(obj, rb_intern("to_path"), pl_path_mark);
-        return rb_funcall(obj, rb_frame_last_func(), 1, a);
+        return rb_funcall(obj, rb_frame_this_func(), 1, a);
 
     case BOXOID:
         obj = pl_convert(obj, rb_intern("to_box"), pl_box_mark);
-        return rb_funcall(obj, rb_frame_last_func(), 1, a);
+        return rb_funcall(obj, rb_frame_this_func(), 1, a);
 
     case POINTOID:
         obj = pl_convert(obj, rb_intern("to_point"), pl_point_mark);
-        return rb_funcall(obj, rb_frame_last_func(), 1, a);
+        return rb_funcall(obj, rb_frame_this_func(), 1, a);
 
     default:
         return Qnil;
@@ -1746,15 +1746,15 @@ pl_circle_to_datum(VALUE obj, VALUE a)
 
     case BOXOID:
         obj = pl_convert(obj, rb_intern("to_box"), pl_box_mark);
-        return rb_funcall(obj, rb_frame_last_func(), 1, a);
+        return rb_funcall(obj, rb_frame_this_func(), 1, a);
         
     case POLYGONOID:
         obj = pl_convert(obj, rb_intern("to_poly"), pl_poly_mark);
-        return rb_funcall(obj, rb_frame_last_func(), 1, a);
+        return rb_funcall(obj, rb_frame_this_func(), 1, a);
 
     case POINTOID:
         obj = pl_convert(obj, rb_intern("to_point"), pl_point_mark);
-        return rb_funcall(obj, rb_frame_last_func(), 1, a);
+        return rb_funcall(obj, rb_frame_this_func(), 1, a);
 
     default:
         return Qnil;

@@ -182,7 +182,7 @@ name_(VALUE obj, VALUE a)                                               \
     if (TYPE(a) != T_DATA ||                                            \
         RDATA(a)->dmark != (RUBY_DATA_FUNC)pl_bit_mark) {               \
         rb_raise(rb_eArgError, "invalid argument for %s",               \
-                 rb_id2name(rb_frame_last_func()));                     \
+                 rb_id2name(rb_frame_this_func()));                     \
     }                                                                   \
     Data_Get_Struct(obj, VarBit, v0);                                   \
     Data_Get_Struct(a, VarBit, v1);                                     \
@@ -207,7 +207,7 @@ pl_bit_push(VALUE obj, VALUE a)
     if (TYPE(a) != T_DATA ||
         RDATA(a)->dmark != (RUBY_DATA_FUNC)pl_bit_mark) {
         rb_raise(rb_eArgError, "invalid argument for %s",
-                 rb_id2name(rb_frame_last_func()));
+                 rb_id2name(rb_frame_this_func()));
     }
     Data_Get_Struct(obj, VarBit, v0);
     Data_Get_Struct(a, VarBit, v1);
@@ -340,7 +340,7 @@ pl_bit_index(VALUE obj, VALUE a)
     if (TYPE(a) != T_DATA ||
         RDATA(a)->dmark != (RUBY_DATA_FUNC)pl_bit_mark) {
         rb_raise(rb_eArgError, "invalid argument for %s",
-                 rb_id2name(rb_frame_last_func()));
+                 rb_id2name(rb_frame_this_func()));
     }
     Data_Get_Struct(obj, VarBit, v0);
     Data_Get_Struct(a, VarBit, v1);
