@@ -6,6 +6,7 @@ ARGV.collect! {|x|
 orig_argv = ARGV.dup
 
 require 'mkmf'
+require 'rbconfig'
 
 class AX
    def marshal_dump
@@ -52,7 +53,7 @@ def create_lang(version = 74, suffix = '', safe = 0)
 
 
    create function plruby#{suffix}_call_handler() returns #{opaque}
-   as '#{Config::CONFIG["sitearchdir"]}/plruby#{suffix}.#{CONFIG["DLEXT"]}'
+   as '#{RbConfig::CONFIG["sitearchdir"]}/plruby#{suffix}.#{CONFIG["DLEXT"]}'
    language '#{language}';
 
    create #{trusted} language 'plruby#{suffix}'
@@ -205,11 +206,11 @@ begin
    Dir.chdir("src")
    if CONFIG["ENABLE_SHARED"] == "no"
       libs = if CONFIG.key?("LIBRUBYARG_STATIC")
-                Config::expand(CONFIG["LIBRUBYARG_STATIC"].dup).sub(/^-l/, '')
+                RbConfig::expand(CONFIG["LIBRUBYARG_STATIC"].dup).sub(/^-l/, '')
              else
-                Config::expand(CONFIG["LIBRUBYARG"].dup).sub(/lib([^.]*).*/, '\\1')
+                RbConfig::expand(CONFIG["LIBRUBYARG"].dup).sub(/lib([^.]*).*/, '\\1')
              end
-      find_library(libs, "ruby_init", Config::expand(CONFIG["archdir"].dup))
+      find_library(libs, "ruby_init", RbConfig::expand(CONFIG["archdir"].dup))
    end
    $objs = ["plruby.o", "plplan.o", "plpl.o", "pltrans.o"] unless $objs
    create_makefile("plruby#{suffix}")
