@@ -256,7 +256,9 @@ Dir["test/*"].each do |dir|
    if regexp =~ dir
       next unless subdirs.include?("src/conversions/#{$1}")
    end
-   make.puts "\t-(cd #{dir} ; RUBY='#{$ruby}' sh ./runtest #{version} #{suffix})"
+   if not File.file? dir
+     make.puts "\t-(cd #{dir} ; RUBY='#{$ruby}' sh ../runtest #{version} #{suffix})"
+   end
 end
 
 make.close
