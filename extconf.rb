@@ -250,7 +250,9 @@ ri-site:
 \t@-(cd docs; rdoc -R plruby.rb)
 
 test: src/$(DLLIB)
+
 EOF
+
 regexp = %r{\Atest/conv_(.*)}
 Dir["test/*"].each do |dir|
    if regexp =~ dir
@@ -260,6 +262,8 @@ Dir["test/*"].each do |dir|
      make.puts "\t-(cd #{dir} ; RUBY='#{$ruby}' sh ../runtest #{version} #{suffix})"
    end
 end
+
+make.print "\n\n.PHONY: all html rdoc ri test"
 
 make.close
 
