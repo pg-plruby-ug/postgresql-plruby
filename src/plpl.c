@@ -677,7 +677,7 @@ pl_tuple_heap(VALUE c, VALUE tuple)
         }
     }
     PLRUBY_BEGIN_PROTECT(1);
-    retval = heap_formtuple(tupdesc, dvalues, nulls);
+    retval = heap_form_tuple(tupdesc, dvalues, nulls);
     PLRUBY_END_PROTECT;
     return retval;
 }
