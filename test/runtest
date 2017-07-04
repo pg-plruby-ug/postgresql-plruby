@@ -3,7 +3,8 @@
 DBNAME=plruby_test
 export DBNAME
 
-superuser="postgres"
+#uncomment below if your usual db account is not superuser
+#superuser="postgres"
 
 which dropdb createdb psql
 if [ $? -ne 0 ]; then
@@ -21,7 +22,7 @@ ${pg_path}createdb $DBNAME
 
 echo "**** Create procedural language plruby$2 ****"
 "${RUBY-ruby}" ../b.rb $*
-if [ $superuser = "" ]; then
+if [ x$superuser = x"" ]; then
   ${pg_path}psql -q -n -X $DBNAME < test_mklang.sql
 else
   ${pg_path}psql -U $superuser -q -n -X $DBNAME < test_mklang.sql
