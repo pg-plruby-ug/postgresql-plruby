@@ -12,6 +12,10 @@
 #define rb_frame_this_func rb_frame_last_func
 #endif
 
+#if PG_VERSION_NUM >= 90200
+#include "utils/timestamp.h"
+#endif
+
 #define CPY_FREE(p0_, p1_, size_) do {		\
     void *p2_ = (void *)p1_;			\
     memcpy((p0_), (p2_), (size_));		\
