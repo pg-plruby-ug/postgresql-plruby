@@ -122,6 +122,14 @@ if have_func("rb_hash_delete", "ruby.h")
    $CFLAGS += " -DHAVE_RB_HASH_DELETE"
 end
 
+if have_func("rb_frame_this_func")
+   $CFLAGS += " -DHAVE_RB_FRAME_THIS_FUNC"
+end
+
+if have_func("rb_frame_last_func")
+   $CFLAGS += " -DHAVE_RB_FRAME_LAST_FUNC"
+end
+
 case version_str = `#{pg_config} --version`
 when /^PostgreSQL ([7-9])\.([0-9])(\.[0-9]+)?$/
    version = 10 * $1.to_i + $2.to_i
