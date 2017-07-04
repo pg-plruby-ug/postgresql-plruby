@@ -3,22 +3,36 @@
 DBNAME=plruby_test
 export DBNAME
 
+#uncomment below if your usual db account is not superuser
+#superuser="postgres"
+
+which dropdb createdb psql
+if [ $? -ne 0 ]; then
+  pg_path=`pg_config --bindir`/
+else
+  pg_path=""
+fi
+
 sleep 1
 echo "**** Destroy old database $DBNAME ****"
-dropdb $DBNAME
+${pg_path}dropdb $DBNAME
 
 echo "**** Create test database $DBNAME ****"
-createdb $DBNAME
+${pg_path}createdb $DBNAME
 
 echo "**** Create procedural language plruby$2 ****"
 "${RUBY-ruby}" ../b.rb $*
-psql -q -n -X $DBNAME < test_mklang.sql
+if [ x$superuser = x"" ]; then
+  ${pg_path}psql -q -n -X $DBNAME < test_mklang.sql
+else
+  ${pg_path}psql -U $superuser -q -n -X $DBNAME < test_mklang.sql
+fi
 
 echo "**** Create tables, functions and triggers ****"
-psql -q -n -X $DBNAME < test_setup.sql
+${pg_path}psql -q -n -X $DBNAME < test_setup.sql
 
 echo "**** Running test queries ****"
-psql -q -n -X -e $DBNAME < test_queries.sql > test.out 2>&1
+${pg_path}psql -q -n -X -e $DBNAME < test_queries.sql > test.out 2>&1
 
 if cmp -s test.expected.$1 test.out; then
   echo "    Tests passed O.K."
