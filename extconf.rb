@@ -256,13 +256,8 @@ ri-site:
 \t@-(cd docs; rdoc -R plruby.rb)
 
 test: src/$(DLLIB)
-EOF
 
-if RUBY_VERSION <= '1.8.6'
-  $ruby_path = $ruby
-else
-  $ruby_path = RbConfig::expand(CONFIG["bindir"]) + File::Separator + RbConfig::CONFIG["RUBY_BASE_NAME"]
-end
+EOF
 
 regexp = %r{\Atest/conv_(.*)}
 Dir["test/*"].each do |dir|
@@ -273,6 +268,8 @@ Dir["test/*"].each do |dir|
      make.puts "\t-(cd #{dir} ; RUBY='#{$ruby_path}' sh ../runtest #{version} #{suffix})"
    end
 end
+
+make.print "\n\n.PHONY: all html rdoc ri test"
 
 make.close
 
