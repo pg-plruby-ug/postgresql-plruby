@@ -8,6 +8,10 @@
 #include <ruby.h>
 #include "package.h"
 
+#if PG_VERSION_NUM >= 90200
+#include "utils/timestamp.h"
+#endif
+
 #if !defined(HAVE_RB_FRAME_THIS_FUNC) && defined(HAVE_RB_FRAME_LAST_FUNC)
 #define rb_frame_this_func rb_frame_last_func
 #endif
