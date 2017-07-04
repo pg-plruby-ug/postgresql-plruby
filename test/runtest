@@ -3,6 +3,9 @@
 DBNAME=plruby_test
 export DBNAME
 
+LANG=C
+export LANG
+
 #uncomment below if your usual db account is not superuser
 #superuser="postgres"
 
