@@ -8,10 +8,6 @@ orig_argv = ARGV.dup
 require 'mkmf'
 require 'rbconfig'
 
-if RUBY_VERSION <= '1.8.7'
-   RbConfig = Config
-end
-
 class AX
    def marshal_dump
       "abc"
