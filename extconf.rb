@@ -192,11 +192,17 @@ suffix = with_config('suffix').to_s
 $CFLAGS += " -DPLRUBY_CALL_HANDLER=plruby#{suffix}_call_handler"
 $CFLAGS += " -DPLRUBY_VALIDATOR=plruby#{suffix}_validator"
 
+if RUBY_VERSION <= '1.8.7'
+   $ruby_path = $ruby
+else
+   $ruby_path = RbConfig::expand(CONFIG["bindir"]) + File::Separator + RbConfig::CONFIG["RUBY_BASE_NAME"]
+end
+
 subdirs.each do |key|
    orig_argv << "--with-cflags='#$CFLAGS -I.. -I ../..'"
    orig_argv << "--with-ldflags='#$LDFLAGS'"
    orig_argv << "--with-cppflags='#$CPPFLAGS'"
-   cmd = "#{CONFIG['RUBY_INSTALL_NAME']} extconf.rb #{orig_argv.join(' ')}"
+   cmd = $ruby_path + " extconf.rb #{orig_argv.join(' ')}"
    system("cd #{key}; #{cmd}")
 end
 
@@ -259,7 +265,7 @@ Dir["test/*"].each do |dir|
       next unless subdirs.include?("src/conversions/#{$1}")
    end
    if not File.file? dir
-     make.puts "\t-(cd #{dir} ; RUBY='#{$ruby}' sh ../runtest #{version} #{suffix})"
+     make.puts "\t-(cd #{dir} ; RUBY='#{$ruby_path}' sh ../runtest #{version} #{suffix})"
    end
 end
 
