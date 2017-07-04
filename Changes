@@ -1,93 +1,21 @@
--- 0.1.0 - 0.2.5
+--- 0.5.4 (2010-01-02)
 
- adaptation for new version of PostgreSQL
+* adapted for PostgreSQL 8.4
+* bug-fix
+* extconf.rb changed to make use of pg_config(1)
 
--- 0.2.6
+--- 0.4.5 - 0.5.3 (2008-03-03)
 
- #exec can have an optional output of type "array", "hash"
- (see the example in plruby.html)
+* adapted for PostgreSQL 8.1, 8.2, and 8.3
 
--- 0.2.7
+The original author Guy Decoux passed away in the beginning of the
+month of July 2008 at the age of 53.  The development is inherited by
+Akinori MUSHA.
 
- PLrubyplan#each
+--- 0.4.5
 
---- 0.2.8
-  
- adapted for 7.3b3
-
---- 0.2.9
-
- adapted for 1.8.0
- corrected stupid bug with GC 
-
---- 0.3.0
-
- *experimental* timeout (--with-timeout)
- fixed SPI_execp()
-
---- 0.3.1
-
- corrected for_numvals() (Thanks  Brad Hilton <bhilton@vpop.net>)
-
---- 0.3.2
-
- functions returning set (PostgreSQL >= 7.3)
-
---- 0.3.3
-
- corrected timeout
- corrected bug with GC
- new classes PL::Plan, PL::Cursor
-
---- 0.3.4
-
- adapted for 7.4
- Warning : array as input and output (7.4)
- anyarray/anyelement in input/output for 7.4
-
---- 0.3.6
-
- corrected "EACH STATEMENT"
- added ExprMultiResult
-
---- 0.3.7
-
- corrected full qualified type names for SPI_prepare
- #each return nil for PL::Plan
- protected PL::PLan::new against parse error
- protected thread value when there is a timeout
-
---- 0.3.8
-
- stupid bug portalActive (only 7.4)
-
---- 0.3.9
-
- corrected rb_hash_delete for 1.6  (Thanks Dennis Vshivkov <walrus@amur.ru>)
- decode arrays in tuples (Thanks Dennis Vshivkov <walrus@amur.ru>)
- corrected pl_yield (Thanks Dennis Vshivkov <walrus@amur.ru>)
- convert arguments (--enable-conversion at compile time : experimental)
- conversion plfunction ==> method (only with --enable-conversion)
- add network, geometry (experimental)
- corrected function returning table
-
---- 0.4.0
-
- --enable-shared
- array for trigger
-
---- 0.4.1
-
- add bitstring
-
---- 0.4.2
-
- by default convert arguments ( --disable-conversion to remove it)
-
---- 0.4.3
-
- IMPORTANT : work only with postgres >= 7.3
- transaction and named arguments for 8.0
+* corrected ReleaseSysCache() (Thanks to Peter Eisentraut <peter_e@gmx.net>)
+* conversion function String#to_datum (Thanks to Dennis Vshivkov <walrus@amur.ru>)
 
 --- 0.4.4
 
@@ -101,21 +29,93 @@
   - MONEY-conv-fix
   - Float-conv-back-fix
 
---- 0.4.5
+--- 0.4.3
 
-* corrected ReleaseSysCache() (Thanks to Peter Eisentraut <peter_e@gmx.net>)
-* conversion function String#to_datum (Thanks to Dennis Vshivkov <walrus@amur.ru>)
+ IMPORTANT : work only with postgres >= 7.3
+ transaction and named arguments for PostgreSQL 8.0
 
---- 0.4.5 - 0.5.3 (2008-03-03)
+--- 0.4.2
 
-* adapted for 8.1, 8.2, and 8.3
+ by default convert arguments ( --disable-conversion to remove it)
 
-The original author Guy Decoux passed away in the beginning of the
-month of July 2008 at the age of 53.  The development is inherited by
-Akinori MUSHA.
+--- 0.4.1
 
---- 0.5.4 (2010-01-02)
+ add bitstring
 
-* adapted for 8.4
-* bug-fix
-* extconf.rb changed to make use of pg_config(1)
+--- 0.4.0
+
+ --enable-shared
+ array for trigger
+
+--- 0.3.9
+
+ corrected rb_hash_delete for Ruby 1.6  (Thanks Dennis Vshivkov <walrus@amur.ru>)
+ decode arrays in tuples (Thanks Dennis Vshivkov <walrus@amur.ru>)
+ corrected pl_yield (Thanks Dennis Vshivkov <walrus@amur.ru>)
+ convert arguments (--enable-conversion at compile time : experimental)
+ conversion plfunction ==> method (only with --enable-conversion)
+ add network, geometry (experimental)
+ corrected function returning table
+
+--- 0.3.8
+
+ stupid bug portalActive (only PostgreSQL 7.4)
+
+--- 0.3.7
+
+ corrected full qualified type names for SPI_prepare
+ #each return nil for PL::Plan
+ protected PL::PLan::new against parse error
+ protected thread value when there is a timeout
+
+--- 0.3.6
+
+ corrected "EACH STATEMENT"
+ added ExprMultiResult
+
+--- 0.3.4
+
+ adapted for PostgreSQL 7.4
+ Warning : array as input and output (PostgreSQL 7.4)
+ anyarray/anyelement in input/output for PostgreSQL 7.4
+
+--- 0.3.3
+
+ corrected timeout
+ corrected bug with GC
+ new classes PL::Plan, PL::Cursor
+
+--- 0.3.2
+
+ functions returning set (PostgreSQL >= 7.3)
+
+--- 0.3.1
+
+ corrected for_numvals() (Thanks  Brad Hilton <bhilton@vpop.net>)
+
+--- 0.3.0
+
+ *experimental* timeout (--with-timeout)
+ fixed SPI_execp()
+
+--- 0.2.9
+
+ adapted for Ruby 1.8.0
+ corrected stupid bug with GC
+
+--- 0.2.8
+
+ adapted for PostgreSQL 7.3b3
+
+--- 0.2.7
+
+ PLrubyplan#each
+
+--- 0.2.6
+
+ #exec can have an optional output of type "array", "hash"
+ (see the example in plruby.html)
+
+--- 0.1.0 - 0.2.5
+
+ adaptation for new version of PostgreSQL
