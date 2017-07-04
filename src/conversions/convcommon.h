@@ -12,6 +12,10 @@
 #include "utils/timestamp.h"
 #endif
 
+#if !defined(HAVE_RB_FRAME_THIS_FUNC) && defined(HAVE_RB_FRAME_LAST_FUNC)
+#define rb_frame_this_func rb_frame_last_func
+#endif
+
 #define CPY_FREE(p0_, p1_, size_) do {		\
     void *p2_ = (void *)p1_;			\
     memcpy((p0_), (p2_), (size_));		\
