@@ -581,7 +581,11 @@ pl_tuple_heap(VALUE c, VALUE tuple)
     TupleDesc tupdesc = 0;
     Datum *dvalues;
     Oid typid;
+#if PG_PL_VERSION > 81
+    bool *isnulls;
+#else
     char *nulls;
+#endif
     int i;
 
     
@@ -610,16 +614,29 @@ pl_tuple_heap(VALUE c, VALUE tuple)
     }
     dvalues = ALLOCA_N(Datum, RARRAY_LEN(c));
     MEMZERO(dvalues, Datum, RARRAY_LEN(c));
+#if PG_PL_VERSION > 81
+    isnulls = ALLOCA_N(bool, RARRAY_LEN(c));
+    MEMZERO(isnulls, bool, RARRAY_LEN(c));
+#else
     nulls = ALLOCA_N(char, RARRAY_LEN(c));
     MEMZERO(nulls, char, RARRAY_LEN(c));
+#endif
     for (i = 0; i < RARRAY_LEN(c); i++) {
         if (NIL_P(RARRAY_PTR(c)[i]) || 
             tupdesc->attrs[i]->attisdropped) {
             dvalues[i] = (Datum)0;
+#if PG_PL_VERSION > 81
+            isnulls[i] = true;
+#else
             nulls[i] = 'n';
+#endif
         }
         else {
+#if PG_PL_VERSION > 81
+            isnulls[i] = false;
+#else
             nulls[i] = ' ';
+#endif
             typid =  tupdesc->attrs[i]->atttypid;
             if (tupdesc->attrs[i]->attndims != 0 ||
 		tpl->att->attinfuncs[i].fn_addr == (PGFunction)array_in) {
@@ -677,7 +694,11 @@ pl_tuple_heap(VALUE c, VALUE tuple)
         }
     }
     PLRUBY_BEGIN_PROTECT(1);
-    retval = heap_form_tuple(tupdesc, dvalues, nulls);
+#if PG_PL_VERSION > 81
+    retval = heap_form_tuple(tupdesc, dvalues, isnulls);
+#else
+    retval = heap_formtuple(tupdesc, dvalues, nulls);
+#endif /* PG_PL_VERSION <= 81 */
     PLRUBY_END_PROTECT;
     return retval;
 }
