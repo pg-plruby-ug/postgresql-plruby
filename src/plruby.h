@@ -34,10 +34,6 @@
 #include "utils/memutils.h"
 #endif
 
-#if PG_PL_VERSION <= 81
-#define heap_form_tuple heap_formtuple
-#endif
-
 #if PG_VERSION_NUM >= 90200
 #include "utils/rel.h"
 #endif
