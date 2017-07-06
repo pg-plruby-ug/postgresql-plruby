@@ -131,7 +131,7 @@ create table pl_box (
 
 create or replace function circle_val(circle[]) returns setof pl_box as '
    args[0].each do |b|
-      yield b.center, b.area, b.radius, b.diameter
+      yield [b.center, b.area, b.radius, b.diameter]
    end
 ' language 'plruby';
 
@@ -181,8 +181,8 @@ create table pl_box (
 create or replace function circle_val(circle, circle) returns setof pl_box as '
     b0 = args[0]
     b1 = args[1]
-    yield  b0.overlap?(b1), b0.overleft?(b1), b0.overright?(b1), 
-           b0.left?(b1), b0.right?(b1), b0.below?(b1), b0.above?(b1)
+    yield  [b0.overlap?(b1), b0.overleft?(b1), b0.overright?(b1),
+           b0.left?(b1), b0.right?(b1), b0.below?(b1), b0.above?(b1)]
 ' language 'plruby';
 
 
