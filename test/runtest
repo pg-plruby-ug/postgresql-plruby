@@ -32,7 +32,9 @@ else
 fi
 
 echo "**** Create tables, functions and triggers ****"
-${pg_path}psql -q -n -X $DBNAME < test_setup.sql
+if [ -e test_setup.sql ]; then
+  ${pg_path}psql -q -n -X $DBNAME < test_setup.sql
+fi
 
 echo "**** Running test queries ****"
 ${pg_path}psql -q -n -X -e $DBNAME < test_queries.sql > test.out 2>&1
