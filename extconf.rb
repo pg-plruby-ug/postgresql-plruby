@@ -51,14 +51,12 @@ def create_lang(version = 74, suffix = '', safe = 0)
  After the installation use *something like this* to create the language 
  plruby#{suffix}
 
+       	CREATE FUNCTION plruby_call_handler () RETURNS language_handler
+       	AS '$libdir/plruby'
+        LANGUAGE C;
 
-   create function plruby#{suffix}_call_handler() returns #{opaque}
-   as '#{RbConfig::CONFIG["sitearchdir"]}/plruby#{suffix}.#{CONFIG["DLEXT"]}'
-   language '#{language}';
-
-   create #{trusted} language 'plruby#{suffix}'
-   handler plruby#{suffix}_call_handler
-   lancompiler 'PL/Ruby#{suffix}';
+        CREATE OR REPLACE LANGUAGE plruby
+        HANDLER  plruby_call_handler;
 
  ========================================================================
 EOT
