@@ -9,11 +9,10 @@ PL/ruby
 Prerequisite
 ------------
 
-> * ruby 1.8.7 or later (maybe 1.8.6 too)
-> * postgresql >= 7.3
+ * ruby 1.8.6
+ * postgresql >= 7.3
 
-  All PostgreSQL headers need to be installed. Command (see `INSTALL` in the
-  directory postgresql-7.x.y)
+  If you are using old PostgreSQL, all headers need to be installed. Command (see `INSTALL` in the directory postgresql-7.x.y)
 
         make install-all-headers
 
@@ -70,10 +69,18 @@ Test (and examples)
 
         make test
 
-  This will run the following two commands:
+  This will run the following three commands:
 
-        ( cd test/plt; ./runtest )
-        ( cd test/plp; ./runtest )
+        ( cd test/plt; runtest )
+        ( cd test/plp; runtest )
+        ( cd test/range; runtest )
+
+  And if you do not specify the option --disable-conversion, `make test`
+  will run the following three commands, too:
+
+        ( cd test/conv_bitstring; runtest )
+        ( cd test/conv_geometry; runtest )
+        ( cd test/conv_network; runtest )
 
   The database `plruby_test` is created and then destroyed.  Don't use
   it if you have such a database.
@@ -108,16 +115,18 @@ Documentation
 Development
 -----------
 
-  New releases and sources can be obtained from <http://github.com/knu/postgresql-plruby>
+  New releases and sources can be obtained from <https://github.com/pg-plruby-ug/postgresql-plruby>
 
-Copying
+License
 -------
 
   This extension module is copyrighted free software by Guy Decoux.
 
   You can redistribute it and/or modify it under the same term as Ruby.
 
-* * *
 
-Guy Decoux <ts@moulon.inra.fr> (original author, deceased in July 2008)
-Akinori MUSHA <knu@idaemons.org> (current maintainer)
+Authors and Contributors
+------------------------
+
+* Guy Decoux <ts@moulon.inra.fr> (original author, deceased in July 2008)
+* Akinori MUSHA <knu@idaemons.org>
