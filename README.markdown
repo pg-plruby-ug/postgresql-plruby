@@ -87,14 +87,12 @@ Test (and examples)
 
   The commands to create the new language are:
 
-        create function plruby_call_handler () returns language_handler
-        as 'path-to-plruby-shared-lib'
-        language 'C';
+	CREATE FUNCTION plruby_call_handler () RETURNS language_handler
+        AS '$libdir/plruby'
+        LANGUAGE C;
 
-        create trusted language 'plruby'
-        handler plruby_call_handler
-        lancompiler 'PL/Ruby';
-
+	CREATE OR REPLACE LANGUAGE plruby
+        HANDLER  plruby_call_handler;
 
   The `trusted` keyword on `create language` tells PostgreSQL,
   that all users (not only those with superuser privilege) are
