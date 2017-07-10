@@ -93,7 +93,13 @@ if safe = with_config("safe-level")
    end
    $CFLAGS += " -DSAFE_LEVEL=#{safe}"
 else
-   safe = 12
+   if RUBY_VERSION >= '2.3'
+      safe = 1
+   elsif RUBY_VERSION >= '2.1'
+      safe = 3
+   else
+      safe = 12
+   end
 end
 
 if with_config("greenplum")

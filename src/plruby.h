@@ -76,7 +76,11 @@
 extern VALUE rb_thread_list();
 
 #ifndef SAFE_LEVEL
+#ifdef RUBY_SAFE_LEVEL_MAX
+#define SAFE_LEVEL RUBY_SAFE_LEVEL_MAX
+#else
 #define SAFE_LEVEL 12
+#endif
 #endif
 
 #ifndef MAIN_SAFE_LEVEL
