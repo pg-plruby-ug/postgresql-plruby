@@ -168,7 +168,7 @@ pl_query_type(VALUE obj)
         typeTup = SearchSysCache(TYPEOID, OidGD(tpl->pro->result_oid),0,0,0);
         PLRUBY_END;
         if (!HeapTupleIsValid(typeTup)) {
-            rb_raise(pl_ePLruby, "Cache lookup for result type %ld failed",
+            rb_raise(pl_ePLruby, "Cache lookup for result type %u failed",
                      tpl->pro->result_oid);
         }
         fpgt = (Form_pg_type) GETSTRUCT(typeTup);
@@ -609,7 +609,7 @@ pl_tuple_heap(VALUE c, VALUE tuple)
         rb_raise(pl_ePLruby, "expected an Array");
     }
     if (tupdesc->natts != RARRAY_LEN(c)) {
-        rb_raise(pl_ePLruby, "Invalid number of rows (%d expected %d)",
+        rb_raise(pl_ePLruby, "Invalid number of rows (%ld expected %d)",
                  RARRAY_LEN(c), tupdesc->natts);
     }
     dvalues = ALLOCA_N(Datum, RARRAY_LEN(c));
