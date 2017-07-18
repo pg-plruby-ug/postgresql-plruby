@@ -4,7 +4,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Untitled</title>
+<title>plruby.rd</title>
 </head>
 <body>
 <h1><a name="label-0" id="label-0">PL/Ruby</a></h1><!-- RDLabel: "PL/Ruby" -->
@@ -33,10 +33,11 @@
 <li><a href="#label-196">class Segment</a></li>
 </ul></li>
 </ul>
-<p>PL/Ruby is a loadable procedural language for the Postgres database
-system  that enable the Ruby language to create functions and trigger
-procedures</p>
-<p>Functions and triggers are singleton methods of the module PLtemp.</p>
+<p>PL/Ruby is a loadable procedural language for the PostgreSQL database
+system that enables the Ruby language to create functions and trigger
+procedures.</p>
+<p>Functions and triggers are defined as singleton methods of the module
+PLtemp.</p>
 <h1><a name="label-1" id="label-1">WARNING</a></h1><!-- RDLabel: "WARNING" -->
 <p><em>if PL/Ruby was compiled with <kbd>--disable-conversion</kbd>,
 all arguments (to the function or the triggers) are passed as string 
@@ -50,11 +51,11 @@ if you want to use an argument as an integer</em></p>
  # PL/Ruby function body
 
 ' LANGUAGE 'plruby';</pre>
-<p>when calling the function in a query, the arguments are given <em>as
-string values</em> in the array <kbd>args</kbd>. To create a little max
+<p>when calling the function in a query, the arguments are given
+in the array <kbd>args</kbd>. To create a little max
 function returning the higher of two int4 values write :</p>
 <pre>CREATE FUNCTION ruby_max(int4, int4) RETURNS int4 AS '
-    if args[0].to_i &gt; args[1].to_i
+    if args[0] &gt; args[1]
         return args[0]
     else
         return args[1]
@@ -64,8 +65,8 @@ function returning the higher of two int4 values write :</p>
 the overpaid_2 function (as found in the older Postgres documentation)
 in PL/Ruby.</p>
 <pre>CREATE FUNCTION overpaid_2 (EMP) RETURNS bool AS '
-    args[0]["salary"].to_f &gt; 200000 || 
-       (args[0]["salary"].to_f &gt; 100000 &amp;&amp; args[0]["age"].to_i &lt; 30)
+    args[0]["salary"] &gt; 200000 || 
+       (args[0]["salary"] &gt; 100000 &amp;&amp; args[0]["age"] &lt; 30)
 ' LANGUAGE 'plruby';</pre>
 <h3><a name="label-3" id="label-3">Warning : with PostgreSQL &gt;= 7.4 "array" are given as a ruby Array</a></h3><!-- RDLabel: "Warning : with PostgreSQL >= 7.4 "array" are given as a ruby Array" -->
 <p>For example to define a function (int4[], int4) and return int4[],
@@ -73,8 +74,8 @@ in version &lt; 7.4 you write</p>
 <pre>CREATE FUNCTION ruby_int4_accum(_int4, int4) RETURNS _int4 AS '
     if /\\{(\\d+),(\\d+)\\}/ =~ args[0]
         a, b = $1, $2
-        newsum = a.to_i + args[1].to_i
-        newcnt = b.to_i + 1
+        newsum = a + args[1]
+        newcnt = b + 1
     else
         raise "unexpected value #{args[0]}"
     end
@@ -83,7 +84,7 @@ in version &lt; 7.4 you write</p>
 <p>This must now (&gt;= 7.4) be written</p>
 <pre>CREATE FUNCTION ruby_int4_accum(_int4, int4) RETURNS _int4 AS '
    a = args[0]
-   [a[0].to_i + args[1].to_i, a[1].to_i + 1]
+   [a[0] + args[1], a[1] + 1]
 ' LANGUAGE 'plruby';</pre>
 <h3><a name="label-4" id="label-4">Release PostgreSQL 8.0</a></h3><!-- RDLabel: "Release PostgreSQL 8.0" -->
 <p>With this version, plruby can have named arguments and the previous functions
@@ -196,7 +197,7 @@ between the call</p>
 <p>For example</p>
 <pre>plruby_test=# create or replace function vv(int) returns setof int as '
 plruby_test'#    i = PL.context || 0
-plruby_test'#    if i &gt;= args[0].to_i
+plruby_test'#    if i &gt;= args[0]
 plruby_test'#       nil
 plruby_test'#    else
 plruby_test'#       PL.context = i + 1
@@ -297,7 +298,7 @@ then incremented on every update operation :</p>
     when PL::INSERT
         new[args[0]] = 0
       when PL::UPDATE
-          new[args[0]] = old[args[0]].to_i + 1
+          new[args[0]] = old[args[0]] + 1
       else
           return PL::OK
       end
