@@ -346,8 +346,13 @@ void Init_plruby_basic()
     id_to_i = rb_intern("to_i");
     id_usec = rb_intern("usec");
 
+#ifdef RUBY_INTEGER_UNIFICATION
+    rb_define_singleton_method(rb_cInteger, "from_datum", pl_fixnum_s_datum, 1);
+    rb_define_method(rb_cInteger, "to_datum", pl_fixnum_to_datum, 1);
+#else
     rb_define_singleton_method(rb_cFixnum, "from_datum", pl_fixnum_s_datum, 1);
     rb_define_method(rb_cFixnum, "to_datum", pl_fixnum_to_datum, 1);
+#endif /* RUBY_INTEGER_UNIFICATION */
     rb_define_singleton_method(rb_cFloat, "from_datum", pl_float_s_datum, 1);
     rb_define_method(rb_cFloat, "to_datum", pl_float_to_datum, 1);
     rb_define_singleton_method(rb_cString, "from_datum", pl_str_s_datum, 1);

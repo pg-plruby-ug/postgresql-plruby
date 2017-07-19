@@ -2,10 +2,18 @@
     extern void plruby_require(char *);
 
     plruby_require("plruby/plruby_basic");
+
+#ifdef RUBY_INTEGER_UNIFICATION
+    rb_hash_aset(plruby_classes, INT2NUM(OIDOID), rb_cInteger);
+    rb_hash_aset(plruby_classes, INT2NUM(INT2OID), rb_cInteger);
+    rb_hash_aset(plruby_classes, INT2NUM(INT4OID), rb_cInteger);
+    rb_hash_aset(plruby_classes, INT2NUM(INT8OID), rb_cInteger);
+#else
     rb_hash_aset(plruby_classes, INT2NUM(OIDOID), rb_cFixnum);
     rb_hash_aset(plruby_classes, INT2NUM(INT2OID), rb_cFixnum);
     rb_hash_aset(plruby_classes, INT2NUM(INT4OID), rb_cFixnum);
     rb_hash_aset(plruby_classes, INT2NUM(INT8OID), rb_cFixnum);
+#endif
 
     rb_hash_aset(plruby_classes, INT2NUM(FLOAT4OID), rb_cFloat);
     rb_hash_aset(plruby_classes, INT2NUM(FLOAT8OID), rb_cFloat);
