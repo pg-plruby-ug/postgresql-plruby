@@ -7,7 +7,7 @@ pwd.sub!(%r{[^/]+/[^/]+$}, "")
 language, extension = 'C', '_new_trigger'
 opaque = 'language_handler'
 
-version = ARGV[0].to_i
+version = ARGV[0].to_s
 suffix = ARGV[1].to_s
 
 begin
@@ -23,6 +23,20 @@ begin
   else
     puts "There is no test_setup.sql.in file"
   end
+
+  f = File.new("test_queries.sql", "w")
+  IO.foreach("test_queries.sql.in") do |x|
+    x.gsub!(/language\s+'plruby'/i, "language 'plruby#{suffix}'")
+    f.print x
+  end
+  f.close
+
+  f = File.new("test.expected." + version, "w")
+  IO.foreach("test.expected." + version + ".in") do |x|
+    x.gsub!(/language\s+'plruby'/i, "language 'plruby#{suffix}'")
+    f.print x
+  end
+  f.close
 
   open("test_mklang.sql", "w") do |f|
     f.print <<EOF
