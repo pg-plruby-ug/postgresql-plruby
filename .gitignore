@@ -10,9 +10,4 @@ test/*/test.out
 test/*/test_mklang.sql
 test/*/test_queries.sql
 test/*/test_setup.sql
-
-test/*/test.expected.??
-
-test/range/test.expected.73
-test/range/test.expected.74
-test/range/test.expected.75
+test/*/test.expected.[1-9][0-9]
