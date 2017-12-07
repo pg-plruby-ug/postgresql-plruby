@@ -101,12 +101,6 @@ Test (and examples)
 	CREATE OR REPLACE LANGUAGE plruby
         HANDLER  plruby_call_handler;
 
-  The `trusted` keyword on `create language` tells PostgreSQL,
-  that all users (not only those with superuser privilege) are
-  permitted to create functions with `LANGUAGE 'plruby'`. This is
-  absolutely safe, because there is nothing a normal user can do
-  with PL/Ruby, to get around access restrictions he/she has.
-
 Documentation
 -------------
 
